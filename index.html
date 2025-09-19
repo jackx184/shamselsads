@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة شمس السادس - شمس السادس اكاديمي</title>
+    <meta name="description" content="شمس السادس التعليمي العراقي - محاضرات مجانية ومنظمة لجميع المواد الدراسية">
+    <meta name="keywords" content="محاضرات, تعليم, عراق, مجاني, دراسة, جامعة">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- إضافة في head -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
+    <!-- إضافة قبل إغلاق body -->
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> ِشمس السادس</h1>
+                <p>موقع المحاضرات التعليمي العراقي</p>
+            </div>
+            <nav class="nav">
+                <a href="#" onclick="event.preventDefault(); showFavorites();" class="nav-link">
+    <i class="fas fa-star"></i> المفضلة
+</a>
+<a href="#" onclick="event.preventDefault(); showHome();" class="nav-link">
+    <i class="fas fa-home"></i> الرئيسية
+</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Breadcrumb Navigation -->
+            <nav class="breadcrumb" id="breadcrumb" style="display: none;">
+                <span class="breadcrumb-item" onclick="showHome()">الرئيسية</span>
+            </nav>
+
+            <!-- Home Page -->
+            <div id="home-page" class="page active">
+                <div class="hero-section">
+                    <h2 class="hero-title">مرحباً بك في موقع شمس السادس</h2>
+                    <p class="hero-subtitle">اختر السنة الدراسية للوصول إلى المحاضرات</p>
+                </div>
+                
+                <div class="year-selection">
+                    <div class="year-card" onclick="selectYear('2025')">
+                        <div class="year-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>محاضرات 2025</h3>
+                        <p>الوصول إلى محاضرات سنة 2025</p>
+                        <div class="year-badge">قديم</div>
+                    </div>
+                    
+                    <div class="year-card" onclick="selectYear('2026')">
+                        <div class="year-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <h3>محاضرات 2026</h3>
+                        <p>الوصول إلى محاضرات سنة 2026</p>
+                        <div class="year-badge">جديد</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects Page -->
+            <div id="subjects-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-book"></i> المواد الدراسية</h2>
+                    <button class="btn-back" onclick="showHome()">
+                        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+                    </button>
+                </div>
+                <div id="subjects-container" class="subjects-grid"></div>
+            </div>
+
+            <!-- Teachers Page -->
+            <div id="teachers-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-users"></i> المدرسين</h2>
+                    <button class="btn-back" onclick="goBack()">
+                        <i class="fas fa-arrow-right"></i> رجوع
+                    </button>
+                </div>
+                <div id="teachers-container" class="teachers-grid"></div>
+            </div>
+
+            <!-- Classes Page -->
+            <div id="classes-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-folder-open"></i> الفصول</h2>
+                    <button class="btn-back" onclick="goBack()">
+                        <i class="fas fa-arrow-right"></i> رجوع
+                    </button>
+                </div>
+                <div id="classes-container" class="classes-grid"></div>
+            </div>
+
+            <!-- Lectures Page -->
+            <div id="lectures-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-play-circle"></i> المحاضرات</h2>
+                    <button class="btn-back" onclick="goBack()">
+                        <i class="fas fa-arrow-right"></i> رجوع
+                    </button>
+                </div>
+                <div class="teacher-info" id="teacher-info"></div>
+                <div id="lectures-container" class="lectures-grid"></div>
+            </div>
+
+            <!-- Favorites Page -->
+            <div id="favorites-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-star"></i> المدرسين المفضلين</h2>
+                    <button class="btn-back" onclick="showHome()">
+                        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+                    </button>
+                </div>
+                <div id="favorites-container" class="teachers-grid"></div>
+            </div>
+
+            <!-- Lecture Player Page -->
+            <div id="player-page" class="page">
+                <div class="page-header">
+                    <button class="btn-back" onclick="goBack()">
+                        <i class="fas fa-arrow-right"></i> رجوع
+                    </button>
+                </div>
+                
+                <div class="player-container">
+                    <div class="video-wrapper">
+                        <!-- [مهم] الفيديو مهيأ لـ iOS inline + AirPlay + Autoplay + iPhone Support -->
+                        <video id="video-player"
+                            preload="metadata"
+                            playsinline webkit-playsinline x-webkit-airplay="allow"
+                            controls="false"
+                            controlslist="nodownload noremoteplayback nofullscreen"
+                            disablepictureinpicture="false"
+                            autoplay
+                            muted
+                            webkit-playsinline="true"
+                            style="width: 100%; height: 100%; border: none; background: #000;"
+                            oncontextmenu="return false;">
+                            <source src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        
+                        <!-- Custom Video Controls -->
+                        <div class="custom-controls" id="custom-controls">
+                            <!-- Progress Bar Container -->
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-buffered" id="progress-buffered"></div>
+                                    <div class="progress-played" id="progress-played"></div>
+                                    <div class="progress-handle" id="progress-handle"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Controls Bottom Bar - Simplified Mobile Design -->
+                            <div class="controls-bar">
+                                <!-- Left Controls -->
+                                <div class="controls-left">
+                                    <button class="control-btn" id="play-pause-btn">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="control-btn" id="step-backward-btn" title="Backward 10s">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                    <button class="control-btn" id="step-forward-btn" title="Forward 10s">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <div class="volume-control desktop-only">
+                                        <button class="control-btn" id="volume-btn">
+                                            <i class="fas fa-volume-up"></i>
+                                        </button>
+                                        <div class="volume-slider" id="volume-slider">
+                                            <div class="volume-bar">
+                                                <div class="volume-fill" id="volume-fill"></div>
+                                                <div class="volume-handle" id="volume-handle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="time-display">
+                                        <span id="current-time">0:00</span>
+                                        <span> / </span>
+                                        <span id="duration-time">0:00</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Right Controls -->
+                                <div class="controls-right">
+                                    <div class="speed-control">
+                                        <button class="control-btn speed-btn" id="speed-btn" title="Playback Speed">
+                                            <span>1x</span>
+                                        </button>
+                                        <div class="speed-menu" id="speed-menu">
+                                            <div class="speed-option" data-speed="0.5">0.5x</div>
+                                            <div class="speed-option active" data-speed="1">1x</div>
+                                            <div class="speed-option" data-speed="1.25">1.25x</div>
+                                            <div class="speed-option" data-speed="1.5">1.5x</div>
+                                            <div class="speed-option" data-speed="2">2x</div>
+                                        </div>
+                                    </div>
+                                    <button class="control-btn" id="fullscreen-btn" title="Fullscreen">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading Spinner -->
+                        <div class="video-loading" id="video-loading">
+                            <div class="video-spinner"></div>
+                        </div>
+                        
+                        <!-- Toast Messages -->
+                        <div class="video-toast" id="video-toast"></div>
+                        
+                        <!-- Mobile Skip Indicators -->
+                        <div class="skip-indicator left" id="skip-left">
+                            <i class="fas fa-fast-backward"></i>
+                            <span>-10s</span>
+                        </div>
+                        <div class="skip-indicator right" id="skip-right">
+                            <i class="fas fa-fast-forward"></i>
+                            <span>+10s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="lecture-details">
+                        <h2 id="lecture-title"></h2>
+                        <div class="teacher-details">
+                            <img id="teacher-avatar" src="https://via.placeholder.com/60x60/667eea/white?text=مدرس" alt="مدرس" onerror="this.src='https://via.placeholder.com/60x60/667eea/white?text=مدرس';this.onerror=null;">
+                            <div>
+                                <h3 id="teacher-name"></h3>
+                                <p id="teacher-subject"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="lecture-description">
+                            <h4>وصف المحاضرة:</h4>
+                            <p>📱 تابعنا على إنستغرام: @Vxee0<br>
+                            📺 قناة المطور للمحاضرات المسربة: @M203SS<br>
+                            ⭐ لا تنسى وضع المدرس في المفضلة<br>
+                            ✅ ضع صح علامة عند إكمال المحاضرة</p>
+                        </div>
+                        
+                        <div class="lecture-actions">
+                            <button class="btn-complete" id="btn-complete" onclick="toggleLectureCompletion()">
+                                <i class="fas fa-check"></i> تم الانتهاء
+                            </button>
+                            <button class="btn-favorite" id="btn-favorite" onclick="toggleTeacherFavorite()">
+                                <i class="fas fa-star"></i> إضافة للمفضلة
+                            </button>
+                        </div>
+                        
+                        <div class="navigation-controls">
+                            <button class="btn-nav" id="btn-prev" onclick="playPreviousLecture()">
+                                <i class="fas fa-step-backward"></i> المحاضرة السابقة
+                            </button>
+                            <button class="btn-nav" id="btn-next" onclick="playNextLecture()">
+                                المحاضرة التالية <i class="fas fa-step-forward"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-graduation-cap"></i> شمس الســــــــادس</h3>
+                    <p>موقع تعليمي عراقي مجاني يهدف لتوفير المحاضرات المنظمة لجميع الطلاب</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="#" onclick="showHome()">الرئيسية</a></li>
+                        <li><a href="#" onclick="showFavorites()">المفضلة</a></li>
+                        <li><a href="#" onclick="selectYear('2025')">محاضرات 2025</a></li>
+                        <li><a href="#" onclick="selectYear('2026')">محاضرات 2026</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>تابعنا</h4>
+                    <div class="social-links">
+                        <a href="https://t.me/vxee0" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/M203SS" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 سادسيون - جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="teacherData2025.js"></script>
+    <script src="teacherData2026.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
+
